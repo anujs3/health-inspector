@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
-const App = () => {
+const App = () => 
+{
     return (
         <div>
             <h1>Now I Do What I Want</h1>
@@ -13,4 +14,5 @@ const App = () => {
 }
 
 ReactDOM.render(<App/>, document.getElementById('root'));
+
 registerServiceWorker();
