@@ -4,29 +4,46 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import Search from './components/Search/Search'
 import Nav from './components/Nav/Nav'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
+import ResultsList from './components/ResultsList/ResultsList'
 
-class App extends React.Component {
+class App extends React.Component 
+{
 
-    constructor() {
+    constructor() 
+    {
         super()
 
-        this.state = {
+        this.state = 
+        {
             searched: false,
+            results: [],
+            loading: false
         }
     }
 
-    updateSearchTerm = (searchTerm) => {
-        console.log(`We are searching for ${searchTerm}`)
-        this.getSearchData(searchTerm).then((data) => {
-            console.log(data)
-            this.setState({
-                searched: true
+    updateSearchTerm = (searchTerm) => 
+    {
+        if (searchTerm.length === 0) 
+        {
+            return null
+        }
+        else 
+        {
+            this.setState({loading: true})
+            this.getSearchData(searchTerm).then((data) => 
+            {
+                this.setState({
+                    searched: true,
+                    loading: false,
+                    results: data
+                })
             })
-
-        })
+        }
     }
 
-    resetSearch = () => {
+    resetSearch = () => 
+    {
         this.setState({
             results: [],
             loading: false,
@@ -34,34 +51,54 @@ class App extends React.Component {
         })
     }
 
-    getSearchData = async (searchTerm) => {
+    getSearchData = async (searchTerm) => 
+    {
         let response
-        try {
+        try 
+        {
             response = await fetch(`https://data.cityofchicago.org/resource/cwig-ma7x.json?$query=SELECT * where Contains(upper(dba_name), upper("${searchTerm}")) or Contains(upper(aka_name), upper("${searchTerm}"))`)
-        } catch (e) {
+        } 
+        catch (e) 
+        {
             console.log(e)
         }
         let data
-        try {
+        try 
+        {
             data = await response.json()
-        } catch (e) {
+        } 
+        catch (e) 
+        {
             console.log(e)
         }
         return data
     }
 
-    render () {
+    render () 
+    {
         return (
-            <div>
-                <Nav
-                    userHasSearched={this.state.searched} />
-                <Search
-                    logoSizeIsSmall={this.state.searched}
-                    updateSearchTerm={this.updateSearchTerm}
-                    resetSearch={this.resetSearch}
-                    changeFilter={this.changeFilter}
-                    filter={this.state.filter} />
-            </div>
+            <Router>
+                <div>
+                    <Nav
+                        userHasSearched={this.state.searched} />
+                    <Search
+                        logoSizeIsSmall={this.state.searched}
+                        updateSearchTerm={this.updateSearchTerm}
+                        resetSearch={this.resetSearch}
+                        changeFilter={this.changeFilter}
+                        filter={this.state.filter} />
+                    <Route exact path="/" render={() => (
+                        <ResultsList
+                            loading={this.state.loading}
+                            results={this.state.results}
+                            searched={this.state.searched}
+                        />
+                    )}/>
+                    <Route path="/map/" render={() => (
+                        <h1>Map</h1>
+                    )}/>
+                </div>
+            </Router>
         )
     }
 }

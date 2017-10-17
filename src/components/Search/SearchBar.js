@@ -3,39 +3,61 @@ import 'font-awesome/css/font-awesome.css'
 import './SearchBar.css'
 import PropTypes from 'prop-types'
 
-class SearchBar extends React.Component {
-
-    constructor(props) {
+class SearchBar extends React.Component 
+{
+    constructor(props) 
+    {
         super(props)
 
-        this.state = {
+        this.state = 
+        {
             search: '',
-            searched: false
+            searched: false,
+            isListSelected: true
         }
     }
 
-    handleSearchChange = (e) => {
+    handleSearchChange = (e) => 
+    {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = (e) => 
+    {
         e.preventDefault()
         this.setState({searched: true})
         this.props.setShrink(true)
         this.props.updateSearchTerm(this.state.search)
     }
 
-    handleReset = (e) => {
+    handleReset = (e) => 
+    {
         e.preventDefault()
         this.setState({ search: '', searched: false })
         this.props.setShrink(false)
         this.props.resetSearch()
     }
 
+    showList = () => 
+    {
+        this.setState({
+            isListSelected: true
+        })
+        this.context.router.history.push('/')
+    }
 
-    render() {
+    showMap = () => 
+    {
+        this.setState({
+            isListSelected: false
+        })
+        this.context.router.history.push('/map/')
+    }
+
+    render() 
+    {
         const mapButtonClasses = this.state.isListSelected ? 'map-button red' : 'map-button white'
         const listButtonClasses = this.state.isListSelected ? 'list-button white' : 'list-button red'
         return (
@@ -73,11 +95,16 @@ class SearchBar extends React.Component {
     }
 }
 
-PropTypes.PropTypes = {
+PropTypes.PropTypes = 
+{
     updateSearchTerm: PropTypes.func.isRequired,
     setShrink: PropTypes.func.isRequired,
     resetSearch: PropTypes.func.isRequired,
+}
 
+SearchBar.contextTypes = 
+{
+    router: PropTypes.object
 }
 
 export default SearchBar
