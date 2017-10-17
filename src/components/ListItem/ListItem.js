@@ -46,10 +46,10 @@ class ListItem extends React.Component
                     <div className="result-list-item-description">
                         <h2>{name}</h2>
                         <p>{this.props.restaurant.address}</p>
-                        <p className="result-list-item-last-updated"> Last Updated: {date.format('MMM D YYYY')}></p>
+                        <p className="result-list-item-last-updated"> Last Updated: {date.format('MMM D YYYY')}</p>
                     </div>
                     <div className="result-list-item-badge">
-                        <img src={badge} alt={this.props.restaurant.results} title={this.props.restaurant.results} />
+                        <img src={badge} alt={this.props.restaurant.results} title={this.props.restaurant.results}/>
                     </div>
                 </div>
             </div>   
